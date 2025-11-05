@@ -5,10 +5,12 @@ import TransferGroup from './TransferGroup';
 import TransfersHeader from './TransfersHeader';
 import React, { useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
+import { Checkbox, Segment } from 'semantic-ui-react';
 
 const Transfers = ({ direction, server }) => {
   const [connecting, setConnecting] = useState(true);
   const [transfers, setTransfers] = useState([]);
+  const [foldAll, setFoldAll] = useState(false);
 
   const [retrying, setRetrying] = useState(false);
   const [cancelling, setCancelling] = useState(false);
@@ -142,6 +144,22 @@ const Transfers = ({ direction, server }) => {
         server={server}
         transfers={transfers}
       />
+
+      {/* Add Fold Toggle Section */}
+      {transfers.length > 0 && (
+        <Segment raised>
+          <div className="transfer-options">
+            <Checkbox
+              checked={foldAll}
+              className="transfer-options-fold-all"
+              label="Fold All Transfers"
+              onChange={() => setFoldAll(!foldAll)}
+              toggle
+            />
+          </div>
+        </Segment>
+      )}
+
       {transfers.length === 0 ? (
         <PlaceholderSegment
           caption={`No ${direction}s to display`}
@@ -153,6 +171,7 @@ const Transfers = ({ direction, server }) => {
             cancel={cancel}
             cancelAll={cancelAll}
             direction={direction}
+            isInitiallyFolded={foldAll}
             key={user.username}
             remove={remove}
             removeAll={removeAll}

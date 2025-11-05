@@ -8,9 +8,15 @@ class TransferGroup extends Component {
     super(props);
 
     this.state = {
-      isFolded: false,
+      isFolded: props.isInitiallyFolded || false,
       selections: new Set(),
     };
+  }
+
+  componentDidUpdate(previousProps) {
+    if (previousProps.isInitiallyFolded !== this.props.isInitiallyFolded) {
+      this.setState({ isFolded: this.props.isInitiallyFolded });
+    }
   }
 
   handleSelectionChange = (directoryName, file, selected) => {
