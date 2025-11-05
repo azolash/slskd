@@ -113,7 +113,7 @@ namespace slskd
         /// <summary>
         ///     The default application data directory.
         /// </summary>
-        public static readonly string DefaultAppDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData, Environment.SpecialFolderOption.DoNotVerify), AppName);
+        public static readonly string DefaultAppDirectory = AppContext.BaseDirectory;
 
         /// <summary>
         ///     Gets the unique Id of this application invocation.
