@@ -49,7 +49,7 @@ const SearchDetail = ({
   const [hideLocked, setHideLocked] = useState(true);
   const [hideNoFreeSlots, setHideNoFreeSlots] = useState(true);
   const [foldResults, setFoldResults] = useState(false);
-  const [showOnlyLossless, setShowOnlyLossless] = useState(false);
+  const [showOnlyLossless, setShowOnlyLossless] = useState(true);
   const [resultFilters, setResultFilters] = useState('');
   const [displayCount, setDisplayCount] = useState(50);
 
