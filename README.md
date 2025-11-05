@@ -9,19 +9,12 @@
 
 A modern client-server application for the [Soulseek](https://www.slsknet.org/news/) file-sharing network.
 
-## Customizations
+## Imporvements
 
-Public:
 - Added Only-Show-Lossless filter to search results, off by default
 - Added another search results filtering method based on Sample Rate (minsamplerate/minsr)
 - Added a sort function in search results (from same response/folder) and Browse user files based on filename, Size, Attributes or Length
 - Added a toggle option to fold all Transfers (Uploads and Downloads)
-
-Personal:
-- All config files (including the .yml file) will be placed in the same folder, no need for %localappdata%/slskd
-- No-free-slot filter in search results on by default
-- Only-Show-Lossless filter in search results on by default
-- Increased initial search results from 5 to 50  and Show more results from 5 to 100
 
 ## Features
 
