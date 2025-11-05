@@ -60,6 +60,7 @@ export const parseFiltersFromString = (string) => {
     minFilesInFolder: 0,
     minFileSize: 0,
     minLength: 0,
+    minSampleRate: 0,
   };
 
   filters.minBitRate =
@@ -75,6 +76,9 @@ export const parseFiltersFromString = (string) => {
   filters.minFilesInFolder =
     getNthMatch(string, /(minfif|minfilesinfolder):(\d+)/iu, 2) ||
     filters.minFilesInFolder;
+  filters.minSampleRate =
+    getNthMatch(string, /(minsr|minsamplerate):(\d+)/iu, 2) ||
+    filters.minSampleRate;
 
   filters.isVBR = Boolean(/isvbr/iu.test(string));
   filters.isCBR = Boolean(/iscbr/iu.test(string));
@@ -129,6 +133,7 @@ export const filterResponse = ({
   }
 
   const filterFiles = (filesToFilter) =>
+    // eslint-disable-next-line complexity
     filesToFilter.filter((file) => {
       const {
         bitRate,
@@ -148,6 +153,7 @@ export const filterResponse = ({
         minBitDepth,
         minFileSize,
         minLength,
+        minSampleRate,
         include = [],
         exclude = [],
       } = filters;
@@ -162,6 +168,7 @@ export const filterResponse = ({
       if (bitDepth < minBitDepth) return false;
       if (size < minFileSize) return false;
       if (length < minLength) return false;
+      if (sampleRate < minSampleRate) return false;
 
       if (
         include.length > 0 &&

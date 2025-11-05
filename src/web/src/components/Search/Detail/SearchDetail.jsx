@@ -245,7 +245,7 @@ const SearchDetail = ({
               onChange={(_event, data) => setResultFilters(data.value)}
               placeholder="
                 lackluster container -bothersome iscbr|isvbr islossless|islossy 
-                minbitrate:320 minbitdepth:24 minfilesize:10 minfilesinfolder:8 minlength:5000
+                minbitrate:320 minbitdepth:24 minfilesize:10 minfilesinfolder:8 minlength:5000 minsamplerate:48000
               "
               value={resultFilters}
             />
