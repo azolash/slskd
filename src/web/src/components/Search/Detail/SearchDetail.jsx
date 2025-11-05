@@ -51,7 +51,7 @@ const SearchDetail = ({
   const [foldResults, setFoldResults] = useState(false);
   const [showOnlyLossless, setShowOnlyLossless] = useState(false);
   const [resultFilters, setResultFilters] = useState('');
-  const [displayCount, setDisplayCount] = useState(5);
+  const [displayCount, setDisplayCount] = useState(50);
 
   // when the search transitions from !isComplete -> isComplete,
   // fetch the results from the server
@@ -266,11 +266,11 @@ const SearchDetail = ({
             <Button
               className="showmore-button"
               fluid
-              onClick={() => setDisplayCount(displayCount + 5)}
+              onClick={() => setDisplayCount(displayCount + 100)}
               primary
               size="large"
             >
-              Show {remainingCount > 5 ? 5 : remainingCount} More Results{' '}
+              Show {remainingCount > 100 ? 100 : remainingCount} More Results{' '}
               {`(${remainingCount} remaining, ${filteredCount} hidden by filter(s))`}
             </Button>
           ) : filteredCount > 0 ? (
