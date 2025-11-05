@@ -49,6 +49,7 @@ const SearchDetail = ({
   const [hideLocked, setHideLocked] = useState(true);
   const [hideNoFreeSlots, setHideNoFreeSlots] = useState(false);
   const [foldResults, setFoldResults] = useState(false);
+  const [showOnlyLossless, setShowOnlyLossless] = useState(false);
   const [resultFilters, setResultFilters] = useState('');
   const [displayCount, setDisplayCount] = useState(5);
 
@@ -98,9 +99,17 @@ const SearchDetail = ({
 
         return r;
       })
-      .map((response) => filterResponse({ filters, response }))
+      .map((response) => {
+        const combinedFilters = {
+          ...parseFiltersFromString(resultFilters),
+          isLossless: showOnlyLossless ? true : filters.isLossless,
+        };
+
+        return filterResponse({ filters: combinedFilters, response });
+      })
       .filter((r) => r.fileCount + r.lockedFileCount > 0)
       .filter((r) => !(hideNoFreeSlots && !r.hasFreeUploadSlot))
+
       .sort((a, b) => {
         if (order === 'asc') {
           return a[field] - b[field];
@@ -115,6 +124,7 @@ const SearchDetail = ({
     resultFilters,
     resultSort,
     results,
+    showOnlyLossless,
   ]);
 
   // when a user uses the action buttons, we will *probably* re-use this component,
@@ -198,6 +208,13 @@ const SearchDetail = ({
                 className="search-options-hide-locked"
                 label="Hide Locked Results"
                 onChange={() => setHideLocked(!hideLocked)}
+                toggle
+              />
+              <Checkbox
+                checked={showOnlyLossless}
+                className="search-options-lossless"
+                label="Show Only Lossless"
+                onChange={() => setShowOnlyLossless(!showOnlyLossless)}
                 toggle
               />
               <Checkbox
