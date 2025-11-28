@@ -18,6 +18,32 @@ const FileList = ({
 }) => {
   const [folded, setFolded] = useState(false);
 
+  const [sortBy, setSortBy] = useState('filename');
+  const [sortDirection, setSortDirection] = useState('asc');
+
+  const sortedFiles = [...files].sort((a, b) => {
+    let aValue = a[sortBy];
+    let bValue = b[sortBy];
+
+    if (sortBy === 'size' || sortBy === 'length') {
+      aValue = aValue || 0;
+      bValue = bValue || 0;
+    }
+
+    if (aValue < bValue) return sortDirection === 'asc' ? -1 : 1;
+    if (aValue > bValue) return sortDirection === 'asc' ? 1 : -1;
+    return 0;
+  });
+
+  const handleSort = (column) => {
+    if (sortBy === column) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortBy(column);
+      setSortDirection('asc');
+    }
+  };
+
   return (
     <div style={{ opacity: locked ? 0.5 : 1 }}>
       <Header
@@ -60,50 +86,71 @@ const FileList = ({
                       }
                     />
                   </Table.HeaderCell>
-                  <Table.HeaderCell className="filelist-filename">
-                    File
+                  <Table.HeaderCell
+                    className="filelist-filename"
+                    onClick={() => handleSort('filename')}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    File{' '}
+                    {sortBy === 'filename' &&
+                      (sortDirection === 'asc' ? '↑' : '↓')}
                   </Table.HeaderCell>
-                  <Table.HeaderCell className="filelist-size">
-                    Size
+                  <Table.HeaderCell
+                    className="filelist-size"
+                    onClick={() => handleSort('size')}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    Size{' '}
+                    {sortBy === 'size' && (sortDirection === 'asc' ? '↑' : '↓')}
                   </Table.HeaderCell>
-                  <Table.HeaderCell className="filelist-attributes">
-                    Attributes
+                  <Table.HeaderCell
+                    className="filelist-attributes"
+                    onClick={() => handleSort('bitRate')}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    Attributes{' '}
+                    {sortBy === 'bitRate' &&
+                      (sortDirection === 'asc' ? '↑' : '↓')}
                   </Table.HeaderCell>
-                  <Table.HeaderCell className="filelist-length">
-                    Length
+                  <Table.HeaderCell
+                    className="filelist-length"
+                    onClick={() => handleSort('length')}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    Length{' '}
+                    {sortBy === 'length' &&
+                      (sortDirection === 'asc' ? '↑' : '↓')}
                   </Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
               <Table.Body>
-                {files
-                  .sort((a, b) => (a.filename > b.filename ? 1 : -1))
-                  .map((f) => (
-                    <Table.Row key={f.filename}>
-                      <Table.Cell className="filelist-selector">
-                        <Checkbox
-                          checked={f.selected}
-                          disabled={disabled}
-                          fitted
-                          onChange={(event, data) =>
-                            onSelectionChange(f, data.checked)
-                          }
-                        />
-                      </Table.Cell>
-                      <Table.Cell className="filelist-filename">
-                        {locked ? <Icon name="lock" /> : ''}
-                        {getFileName(f.filename)}
-                      </Table.Cell>
-                      <Table.Cell className="filelist-size">
-                        {formatBytes(f.size)}
-                      </Table.Cell>
-                      <Table.Cell className="filelist-attributes">
-                        {formatAttributes(f)}
-                      </Table.Cell>
-                      <Table.Cell className="filelist-length">
-                        {formatSeconds(f.length)}
-                      </Table.Cell>
-                    </Table.Row>
-                  ))}
+                {sortedFiles.map((f) => (
+                  <Table.Row key={f.filename}>
+                    <Table.Cell className="filelist-selector">
+                      <Checkbox
+                        checked={f.selected}
+                        disabled={disabled}
+                        fitted
+                        onChange={(event, data) =>
+                          onSelectionChange(f, data.checked)
+                        }
+                      />
+                    </Table.Cell>
+                    <Table.Cell className="filelist-filename">
+                      {locked ? <Icon name="lock" /> : ''}
+                      {getFileName(f.filename)}
+                    </Table.Cell>
+                    <Table.Cell className="filelist-size">
+                      {formatBytes(f.size)}
+                    </Table.Cell>
+                    <Table.Cell className="filelist-attributes">
+                      {formatAttributes(f)}
+                    </Table.Cell>
+                    <Table.Cell className="filelist-length">
+                      {formatSeconds(f.length)}
+                    </Table.Cell>
+                  </Table.Row>
+                ))}
               </Table.Body>
               {footer && (
                 <Table.Footer fullWidth>

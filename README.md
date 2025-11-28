@@ -9,6 +9,13 @@
 
 A modern client-server application for the [Soulseek](https://www.slsknet.org/news/) file-sharing network.
 
+## Imporvements
+
+- Added Only-Show-Lossless filter to search results, off by default
+- Added another search results filtering method based on Sample Rate (minsamplerate/minsr)
+- Added a sort function in search results (from same response/folder) and Browse user files based on filename, Size, Attributes or Length
+- Added a toggle option to fold all Transfers (Uploads and Downloads)
+
 ## Features
 
 ### Secure access
