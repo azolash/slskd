@@ -47,10 +47,11 @@ const SearchDetail = ({
   const [hiddenResults, setHiddenResults] = useState([]);
   const [resultSort, setResultSort] = useState('uploadSpeed');
   const [hideLocked, setHideLocked] = useState(true);
-  const [hideNoFreeSlots, setHideNoFreeSlots] = useState(false);
+  const [hideNoFreeSlots, setHideNoFreeSlots] = useState(true);
   const [foldResults, setFoldResults] = useState(false);
+  const [showOnlyLossless, setShowOnlyLossless] = useState(true);
   const [resultFilters, setResultFilters] = useState('');
-  const [displayCount, setDisplayCount] = useState(5);
+  const [displayCount, setDisplayCount] = useState(50);
 
   // when the search transitions from !isComplete -> isComplete,
   // fetch the results from the server
@@ -98,9 +99,17 @@ const SearchDetail = ({
 
         return r;
       })
-      .map((response) => filterResponse({ filters, response }))
+      .map((response) => {
+        const combinedFilters = {
+          ...parseFiltersFromString(resultFilters),
+          isLossless: showOnlyLossless ? true : filters.isLossless,
+        };
+
+        return filterResponse({ filters: combinedFilters, response });
+      })
       .filter((r) => r.fileCount + r.lockedFileCount > 0)
       .filter((r) => !(hideNoFreeSlots && !r.hasFreeUploadSlot))
+
       .sort((a, b) => {
         if (order === 'asc') {
           return a[field] - b[field];
@@ -115,6 +124,7 @@ const SearchDetail = ({
     resultFilters,
     resultSort,
     results,
+    showOnlyLossless,
   ]);
 
   // when a user uses the action buttons, we will *probably* re-use this component,
@@ -201,6 +211,13 @@ const SearchDetail = ({
                 toggle
               />
               <Checkbox
+                checked={showOnlyLossless}
+                className="search-options-lossless"
+                label="Show Only Lossless"
+                onChange={() => setShowOnlyLossless(!showOnlyLossless)}
+                toggle
+              />
+              <Checkbox
                 checked={hideNoFreeSlots}
                 className="search-options-hide-no-slots"
                 label="Hide Results with No Free Slots"
@@ -228,7 +245,7 @@ const SearchDetail = ({
               onChange={(_event, data) => setResultFilters(data.value)}
               placeholder="
                 lackluster container -bothersome iscbr|isvbr islossless|islossy 
-                minbitrate:320 minbitdepth:24 minfilesize:10 minfilesinfolder:8 minlength:5000
+                minbitrate:320 minbitdepth:24 minfilesize:10 minfilesinfolder:8 minlength:5000 minsamplerate:48000
               "
               value={resultFilters}
             />
@@ -249,11 +266,11 @@ const SearchDetail = ({
             <Button
               className="showmore-button"
               fluid
-              onClick={() => setDisplayCount(displayCount + 5)}
+              onClick={() => setDisplayCount(displayCount + 100)}
               primary
               size="large"
             >
-              Show {remainingCount > 5 ? 5 : remainingCount} More Results{' '}
+              Show {remainingCount > 100 ? 100 : remainingCount} More Results{' '}
               {`(${remainingCount} remaining, ${filteredCount} hidden by filter(s))`}
             </Button>
           ) : filteredCount > 0 ? (
